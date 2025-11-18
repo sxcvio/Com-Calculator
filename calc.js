@@ -126,7 +126,7 @@ function recalc() {
 }
 ['input','change'].forEach(ev=>{
   platformEl.addEventListener(ev, ()=>{ updatePlayerokFields(); recalc(); });
-  sitePriceEl.addEventListener(ev, recalc);
+  sitePriceEl.addEventListener(ev, function() { updatePlayerokFields(); recalc(); });
   buyPriceEl.addEventListener(ev, recalc);
   upCountEl.addEventListener(ev, recalc);
 });
