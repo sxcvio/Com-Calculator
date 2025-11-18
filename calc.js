@@ -57,13 +57,14 @@ function recalc() {
   if (platform === 'FUNPAY') {
     buyerPays = desiredProfit / 0.8;
     publishCommission = buyerPays - desiredProfit;
-    withdrawCommission = desiredProfit * 0.03;
+    // Комиссия вывода: 3%, но не менее 30₽
+    withdrawCommission = Math.max(30, desiredProfit * 0.03);
     profit = round2(desiredProfit - withdrawCommission); // после вывода
     clearBreakdown = `
       <div class="breakdown"><b>Расчет чистой прибыли:</b>
         <table class="cb-table"><tbody>
           <tr><td>Желаемая чистая сумма</td><td class="cb">${desiredProfit.toFixed(2)} ₽</td></tr>
-          <tr><td>— Комиссия вывода (3%)</td><td class="cb">- ${withdrawCommission.toFixed(2)} ₽</td></tr>
+          <tr><td>— Комиссия вывода (3%, но не менее 30₽)</td><td class="cb">- ${withdrawCommission.toFixed(2)} ₽</td></tr>
           ${!isNaN(buyPrice) && buyPrice > 0 ? `<tr><td>— Закупка</td><td class="cb">- ${buyPrice.toFixed(2)} ₽</td></tr>` : ''}
           <tr><td class="cbf">Итого чистая прибыль</td><td class="cbf positive">${((desiredProfit - withdrawCommission - (isNaN(buyPrice)||!buyPrice?0:buyPrice))).toFixed(2)} ₽</td></tr>
         </tbody></table>
@@ -72,18 +73,18 @@ function recalc() {
       `;
     html = `<div>Покупатель платит: <b>${buyerPays.toFixed(2)} ₽</b></div>` +
       `<div>Комиссия площадки (20%): <b>${publishCommission.toFixed(2)} ₽</b></div>` +
-      `<div>Комиссия вывода (3%): <b>${withdrawCommission.toFixed(2)} ₽</b></div>` +
+      `<div>Комиссия вывода (3%, но не менее 30₽): <b>${withdrawCommission.toFixed(2)} ₽</b></div>` +
       `<div class='highlight'>Продавец получит на руки (до закупки): <span class='positive'>${(desiredProfit-withdrawCommission).toFixed(2)} ₽</span></div>`;
   } else if (platform === 'STARVELL') {
     buyerPays = desiredProfit / 0.9;
     publishCommission = buyerPays - desiredProfit;
-    withdrawCommission = desiredProfit * 0.03;
+    withdrawCommission = Math.max(30, desiredProfit * 0.03);
     profit = round2(desiredProfit - withdrawCommission); // после вывода
     clearBreakdown = `
       <div class="breakdown"><b>Расчет чистой прибыли:</b>
         <table class="cb-table"><tbody>
           <tr><td>Желаемая чистая сумма</td><td class="cb">${desiredProfit.toFixed(2)} ₽</td></tr>
-          <tr><td>— Комиссия вывода (3%)</td><td class="cb">- ${withdrawCommission.toFixed(2)} ₽</td></tr>
+          <tr><td>— Комиссия вывода (3%, но не менее 30₽)</td><td class="cb">- ${withdrawCommission.toFixed(2)} ₽</td></tr>
           ${!isNaN(buyPrice) && buyPrice > 0 ? `<tr><td>— Закупка</td><td class="cb">- ${buyPrice.toFixed(2)} ₽</td></tr>` : ''}
           <tr><td class="cbf">Итого чистая прибыль</td><td class="cbf positive">${((desiredProfit - withdrawCommission - (isNaN(buyPrice)||!buyPrice?0:buyPrice))).toFixed(2)} ₽</td></tr>
         </tbody></table>
@@ -92,7 +93,7 @@ function recalc() {
       `;
     html = `<div>Покупатель платит: <b>${buyerPays.toFixed(2)} ₽</b></div>` +
       `<div>Комиссия площадки (10%): <b>${publishCommission.toFixed(2)} ₽</b></div>` +
-      `<div>Комиссия вывода (3%): <b>${withdrawCommission.toFixed(2)} ₽</b></div>` +
+      `<div>Комиссия вывода (3%, но не менее 30₽): <b>${withdrawCommission.toFixed(2)} ₽</b></div>` +
       `<div class='highlight'>Продавец получит на руки (до закупки): <span class='positive'>${(desiredProfit-withdrawCommission).toFixed(2)} ₽</span></div>`;
   } else if (platform === 'PLAYEROK') {
     buyerPays = desiredProfit;
